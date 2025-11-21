@@ -1,0 +1,233 @@
+
+#  pedido
+
+class Pedido:
+    contador_pedidos = 101
+
+    def __init__(self, talla, tela, imagen, color_tela, cantidad, detalles_extras, estado, precio_unitario, metodo_pago):
+        self.id_pedido = Pedido.contador_pedidos
+        Pedido.contador_pedidos += 1
+
+        self.talla = talla
+        self.tela = tela
+        self.imagen = imagen
+        self.color_tela = color_tela
+        self.cantidad = cantidad
+        self.detalles_extras = detalles_extras
+        self.estado = estado
+        self.precio_unitario = precio_unitario
+        self.metodo_pago = metodo_pago
+        self.monto_pagar = self.calcular_monto()
+
+    def calcular_monto(self):
+        return self.cantidad * self.precio_unitario
+
+    def __str__(self):
+        return (f"\nID Pedido: {self.id_pedido}\n"
+                f"Talla: {self.talla}\n"
+                f"Tela: {self.tela}\n"
+                f"Imagen referencia: {self.imagen}\n"
+                f"Color de tela: {self.color_tela}\n"
+                f"Cantidad: {self.cantidad}\n"
+                f"Detalles extras: {self.detalles_extras}\n"
+                f"Estado: {self.estado}\n"
+                f"Precio unitario: {self.precio_unitario}\n"
+                f"Método de pago: {self.metodo_pago}\n"
+                f"Monto a pagar: {self.monto_pagar}\n")
+
+
+
+# editor de pedidos
+
+class EditorPedido:
+
+    def editar_talla(self, pedido, nueva_talla):
+        pedido.talla = nueva_talla
+
+    def editar_tela(self, pedido, nueva_tela):
+        pedido.tela = nueva_tela
+
+    def editar_imagen(self, pedido, nueva_imagen):
+        pedido.imagen = nueva_imagen
+
+    def editar_color(self, pedido, nuevo_color):
+        pedido.color_tela = nuevo_color
+
+    def editar_cantidad(self, pedido, nueva_cantidad):
+        pedido.cantidad = nueva_cantidad
+        pedido.monto_pagar = pedido.calcular_monto()
+
+    def editar_detalles(self, pedido, nuevos_detalles):
+        pedido.detalles_extras = nuevos_detalles
+
+    def editar_estado(self, pedido, nuevo_estado):
+        pedido.estado = nuevo_estado
+
+    def editar_precio(self, pedido, nuevo_precio):
+        pedido.precio_unitario = nuevo_precio
+        pedido.monto_pagar = pedido.calcular_monto()
+
+    def editar_metodo_pago(self, pedido, nuevo_metodo):
+        pedido.metodo_pago = nuevo_metodo
+
+
+
+# menu de edicion de pedido
+
+class GestorEdicion:
+
+    def __init__(self, editor):
+        self.editor = editor
+
+    def mostrar_menu_edicion(self, pedidos):
+        print("\n--- EDITAR PEDIDO ---")
+        if not pedidos:
+            print("No hay pedidos para editar.")
+            return
+
+        try:
+            id_editar = int(input("Ingrese el ID del pedido a editar: "))
+        except ValueError:
+            print("ID inválido.")
+            return
+
+        pedido = next((p for p in pedidos if p.id_pedido == id_editar), None)
+        if not pedido:
+            print("Pedido no encontrado.")
+            return
+
+        while True:
+            print("\n¿Qué desea editar?")
+            print("1. Talla")
+            print("2. Tela")
+            print("3. Imagen")
+            print("4. Color de la tela")
+            print("5. Cantidad")
+            print("6. Detalles extras")
+            print("7. Estado")
+            print("8. Precio unitario")
+            print("9. Método de pago")
+            print("10. Salir de edición")
+
+            opcion = input("Seleccione: ")
+
+            if opcion == "1":
+                nuevo = input("Nueva talla: ")
+                self.editor.editar_talla(pedido, nuevo)
+            elif opcion == "2":
+                nuevo = input("Nueva tela: ")
+                self.editor.editar_tela(pedido, nuevo)
+            elif opcion == "3":
+                nuevo = input("Nueva imagen: ")
+                self.editor.editar_imagen(pedido, nuevo)
+            elif opcion == "4":
+                nuevo = input("Nuevo color de tela: ")
+                self.editor.editar_color(pedido, nuevo)
+            elif opcion == "5":
+                try:
+                    nuevo = int(input("Nueva cantidad: "))
+                    self.editor.editar_cantidad(pedido, nuevo)
+                except ValueError:
+                    print("Cantidad inválida.")
+            elif opcion == "6":
+                nuevo = input("Nuevos detalles: ")
+                self.editor.editar_detalles(pedido, nuevo)
+            elif opcion == "7":
+                nuevo = input("Nuevo estado: ")
+                self.editor.editar_estado(pedido, nuevo)
+            elif opcion == "8":
+                try:
+                    nuevo = float(input("Nuevo precio unitario: "))
+                    self.editor.editar_precio(pedido, nuevo)
+                except ValueError:
+                    print("Precio inválido.")
+            elif opcion == "9":
+                nuevo = input("Nuevo método de pago: ")
+                self.editor.editar_metodo_pago(pedido, nuevo)
+            elif opcion == "10":
+                print("Saliendo del editor...")
+                break
+            else:
+                print("Opción no válida.")
+
+        print("\n¡Pedido actualizado correctamente!\n")
+
+
+
+# CLASE GESTOR PEDIDOS
+
+class GestorPedidos:
+
+    def __init__(self):
+        self.pedidos = []
+        self.editor = GestorEdicion(EditorPedido())
+
+    def agregar_pedido(self):
+        print("\n--- REGISTRAR NUEVO PEDIDO ---")
+        talla = input("Talla: ")
+        tela = input("Tela: ")
+        imagen = input("Imagen o referencia: ")
+        color_tela = input("Color de la tela: ")
+
+        try:
+            cantidad = int(input("Cantidad: "))
+        except ValueError:
+            print("Cantidad inválida. Se asigna 1 por defecto.")
+            cantidad = 1
+
+        detalles_extras = input("Detalles extras: ")
+        estado = input("Estado del pedido (Pendiente/Pagado/Entregado): ")
+
+        try:
+            precio_unitario = float(input("Precio unitario: "))
+        except ValueError:
+            print("Precio inválido. Se asigna 0 por defecto.")
+            precio_unitario = 0.0
+
+        metodo_pago = input("Método de pago: ")
+
+        nuevo = Pedido(talla, tela, imagen, color_tela, cantidad, detalles_extras, estado, precio_unitario, metodo_pago)
+        self.pedidos.append(nuevo)
+        print("\nPedido registrado.\n")
+
+    def mostrar_pedidos(self):
+        print("\n--- LISTA DE PEDIDOS ---\n")
+        if not self.pedidos:
+            print("No hay pedidos registrados.\n")
+            return
+        for pedido in self.pedidos:
+            print(pedido)
+            print("---------------------------")
+
+
+# ============================
+# MENÚ PRINCIPAL
+# ============================
+def menu():
+    gestor = GestorPedidos()
+
+    while True:
+        print("\n====== SISTEMA DE PEDIDOS DE COSTURERÍA ======")
+        print("1. Registrar pedido")
+        print("2. Mostrar pedidos")
+        print("3. Editar pedido")
+        print("4. Salir")
+        opcion = input("Selecciona una opción: ")
+
+        if opcion == "1":
+            gestor.agregar_pedido()
+        elif opcion == "2":
+            gestor.mostrar_pedidos()
+        elif opcion == "3":
+            gestor.editor.mostrar_menu_edicion(gestor.pedidos)
+        elif opcion == "4":
+            print("Saliendo del sistema...")
+            break
+        else:
+            print("Opción no válida. Intente de nuevo.\n")
+
+
+# ============================
+# EJECUTAR MENÚ
+# ============================
+menu()
