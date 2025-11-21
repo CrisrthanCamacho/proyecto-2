@@ -154,7 +154,7 @@ class GestorEdicion:
 
 
 
-# CLASE GESTOR PEDIDOS
+# gestion de pedidos
 
 class GestorPedidos:
 
@@ -200,9 +200,9 @@ class GestorPedidos:
             print("---------------------------")
 
 
-# ============================
-# MENÚ PRINCIPAL
-# ============================
+
+# menú pricipal
+
 def menu():
     gestor = GestorPedidos()
 
@@ -227,7 +227,5 @@ def menu():
             print("Opción no válida. Intente de nuevo.\n")
 
 
-# ============================
-# EJECUTAR MENÚ
-# ============================
+
 menu()
