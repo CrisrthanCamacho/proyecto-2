@@ -1,4 +1,4 @@
-
+from datetime import datetime
 #  pedido
 
 class Pedido:
@@ -18,12 +18,14 @@ class Pedido:
         self.precio_unitario = precio_unitario
         self.metodo_pago = metodo_pago
         self.monto_pagar = self.calcular_monto()
+        self.fecha_creacion = datetime.now()
 
     def calcular_monto(self):
         return self.cantidad * self.precio_unitario
 
     def __str__(self):
         return (f"\nID Pedido: {self.id_pedido}\n"
+                f"fecha de registro: {self.fecha_creacion.strftime('%d/%m/%Y %H:%M:%S')}\n"
                 f"Talla: {self.talla}\n"
                 f"Tela: {self.tela}\n"
                 f"Imagen referencia: {self.imagen}\n"
@@ -200,6 +202,50 @@ class GestorPedidos:
             print("---------------------------")
 
 
+    def eliminar_pedido(self):
+        if not self.pedidos:
+            print("No hay pedidos para eliminar.")
+            return
+
+        try:
+            id_eliminar = int(input("Ingrese el ID del pedido a eliminar: "))
+        except ValueError:
+            print("ID inválido.")
+            return
+
+        pedido = next((p for p in self.pedidos if p.id_pedido == id_eliminar), None)
+        if not pedido:
+            print("Pedido no encontrado.")
+            return
+
+        self.pedidos.remove(pedido)
+        print(f"Pedido {id_eliminar} eliminado correctamente.")
+
+
+    def cancelar_pedido(self):
+        if not self.pedidos:
+            print("No hay pedidos para cancelar.")
+            return
+
+        try:
+            id_cancelar = int(input("Ingrese el ID del pedido a cancelar: "))
+        except ValueError:
+            print("ID inválido.")
+            return
+
+        pedido = next((p for p in self.pedidos if p.id_pedido == id_cancelar), None)
+        if not pedido:
+            print("Pedido no encontrado.")
+            return
+
+        if pedido.estado.lower() == "cancelado":
+            print("El pedido ya está cancelado.")
+            return
+
+        pedido.estado = "Cancelado"
+        print(f"Pedido {pedido.id_pedido} cancelado correctamente.")
+
+
 
 # menú pricipal
 
@@ -211,7 +257,9 @@ def menu():
         print("1. Registrar pedido")
         print("2. Mostrar pedidos")
         print("3. Editar pedido")
-        print("4. Salir")
+        print("4. eliminar pedido")
+        print("5. cancelar pedido")
+        print("6. Salir")
         opcion = input("Selecciona una opción: ")
 
         if opcion == "1":
@@ -221,6 +269,10 @@ def menu():
         elif opcion == "3":
             gestor.editor.mostrar_menu_edicion(gestor.pedidos)
         elif opcion == "4":
+            gestor.eliminar_pedido()
+        elif opcion == "5":
+            gestor.cancelar_pedido()
+        elif opcion == "6":
             print("Saliendo del sistema...")
             break
         else:
@@ -228,4 +280,5 @@ def menu():
 
 
 
-menu()
+if __name__ == "__main__":
+    menu()
