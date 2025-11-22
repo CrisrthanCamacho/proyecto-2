@@ -9,10 +9,10 @@ class Confeccionista:
         Confeccionista.contador_id += 1
         self.id = Confeccionista.contador_id
         self.nombre = nombre
-        self.pedidos = []  # lista vacía donde se guardarán los pedidos asignados
+        self.pedidos = []  # lista de pedidos asignados
 
 
-# Lista donde guardamos todos los confeccionistas registrados
+# Lista global donde guardamos los confeccionistas
 confeccionistas = []
 
 
@@ -42,7 +42,6 @@ def eliminar_confeccionista():
         print("No hay confeccionistas registrados.\n")
         return
 
-    # Mostrar lista
     for i, c in enumerate(confeccionistas, start=1):
         print(f"{i}. ID {c.id} - {c.nombre}")
 
@@ -55,7 +54,7 @@ def eliminar_confeccionista():
 
 
 # -------------------------------------------------------
-# Ver información de un confeccionista
+# Ver información completa de un confeccionista
 # -------------------------------------------------------
 def ver_info_confeccionista():
     print("\n--- VER INFORMACIÓN DE CONFECCIONISTA ---")
@@ -92,6 +91,39 @@ def ver_info_confeccionista():
     print()
 
 
+# -------------------------------------------------------
+# Asignar VARIOS pedidos a un confeccionista
+# -------------------------------------------------------
+def asignar_pedidos_confeccionista():
+    print("\n--- ASIGNAR PEDIDOS A CONFECCIONISTA ---")
+
+    if not confeccionistas:
+        print("No hay confeccionistas registrados.\n")
+        return
+
+    # Mostrar lista
+    for i, c in enumerate(confeccionistas, start=1):
+        print(f"{i}. ID {c.id} - {c.nombre}")
+
+    try:
+        opcion = int(input("Seleccione un confeccionista por número: "))
+        seleccionado = confeccionistas[opcion - 1]
+    except:
+        print(" Opción no válida.\n")
+        return
+
+    print("\nIngrese varios pedidos separados por coma (,)")
+    print("Ejemplo: vestido rojo, camisa azul, arreglo cierre\n")
+
+    pedidos_txt = input("Pedidos: ").strip()
+
+    pedidos_lista = [p.strip() for p in pedidos_txt.split(",") if p.strip()]
+
+    seleccionado.pedidos.extend(pedidos_lista)
+
+    print(f"\n {len(pedidos_lista)} pedidos fueron asignados a {seleccionado.nombre}.\n")
+
+
 # ==========================================
 # MENÚ GESTIÓN DE CONFECCIONISTAS
 # ==========================================
@@ -101,7 +133,8 @@ def menu_gestion_confeccionista():
         print("1. Registrar confeccionistas")
         print("2. Eliminar confeccionistas")
         print("3. Ver info de confeccionistas")
-        print("4. Salir")
+        print("4. Asignar pedidos a confeccionista")
+        print("5. Salir")
 
         opcion = input("Elige una opción: ")
 
@@ -112,7 +145,14 @@ def menu_gestion_confeccionista():
         elif opcion == "3":
             ver_info_confeccionista()
         elif opcion == "4":
+            asignar_pedidos_confeccionista()
+        elif opcion == "5":
             print("Saliendo de gestión de confeccionistas...")
             break
         else:
             print(" Opción inválida.\n")
+
+
+# Ejecutar el menú solo si es el archivo principal
+if __name__ == "__main__":
+    menu_gestion_confeccionista()
