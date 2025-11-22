@@ -1,4 +1,5 @@
-
+from pedidos import GestorPedidos
+gestor_pedidos = GestorPedidos()
 # menú inicio de sesión
 
 
@@ -21,7 +22,7 @@ def menu_cliente():
         print("1. editar perfil")
         print("2. registrar pedido")
         print("3. historial de pedidos")
-        print("4. pagar pedido")
+        print("4. abonar pedido")
         print("5. cancelar pedido")
         print("6. pagar pedido")
         print("7. Cerrar Sesión")
@@ -30,13 +31,13 @@ def menu_cliente():
         if opcion == "1":
             print("")
         elif opcion =="2":
-            print("")
+            gestor_pedidos.agregar_pedido()
         elif opcion =="3":
-            print("")
+            gestor_pedidos.mostrar_pedidos()
         elif opcion == "4":
             print("s")
         elif opcion == "5":
-            print("s")
+            gestor_pedidos.cancelar_pedido()
         elif opcion == "6":
             print("s")
             
@@ -134,13 +135,13 @@ def menu_gestion_pedidos():
         opcion = input("Elige una opción: ")
 
         if opcion == "1":
-            print("s")
+            gestor_pedidos.mostrar_pedidos()
         elif opcion =="2":
             print("d")
         elif opcion =="3":
-            print("f")
+            gestor_pedidos.eliminar_pedido()
         elif opcion =="4":
-            print("g")
+            gestor_pedidos.editor.mostrar_menu_edicion(gestor_pedidos.pedidos)
         elif opcion == "5":
             print("saliendo de gestion de pedidos...")
             break
@@ -168,9 +169,9 @@ def menu_registro_cliente():
 
 def menu_inicio_sesion():
     print("\n--- Iniciar Sesión ---")
-    opcion= (input("elige una opcion"))
     print("1. iniciar sesión como cliente")
     print("2. iniciar sesión como admin")
+    opcion= (input("elige una opcion"))
 
     if opcion == "1":
         print("s")
