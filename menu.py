@@ -4,7 +4,7 @@
 
 def mostrar_menu_principal():
     print("\n===== MENÚ PRINCIPAL =====")
-    print("1. Registrarme como Usuario/Admin")
+    print("1. Registrarme como Admin")
     print("2. Registrarme como Cliente")
     print("3. Iniciar Sesión")
     print("4. Salir")
@@ -168,18 +168,17 @@ def menu_registro_cliente():
 
 def menu_inicio_sesion():
     print("\n--- Iniciar Sesión ---")
-    print("Simulación: escribe 'admin' o 'cliente' para entrar.")
+    opcion= (input("elige una opcion"))
+    print("1. iniciar sesión como cliente")
+    print("2. iniciar sesión como admin")
 
-    tipo = input("Tipo de usuario: ")
-
-    if tipo == "admin":
-        print("Has iniciado sesión como ADMIN.")
-        menu_admin()
-
-    elif tipo == "cliente":
-        print("Has iniciado sesión como CLIENTE.")
+    if opcion == "1":
+        print("s")
         menu_cliente()
 
+    elif opcion == "2":
+        print("")
+        menu_admin()
     else:
         print("Tipo de usuario desconocido.")
 
