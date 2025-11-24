@@ -1,4 +1,6 @@
 from datetime import datetime
+from prueba import GestionConfeccionistas
+gestion_confeccionistas = GestionConfeccionistas()
 #  pedido
 
 class Pedido:
@@ -19,6 +21,7 @@ class Pedido:
         self.metodo_pago = metodo_pago
         self.monto_pagar = self.calcular_monto()
         self.fecha_creacion = datetime.now()
+        self.confeccionista_asignado = None
 
     def calcular_monto(self):
         return self.cantidad * self.precio_unitario
@@ -35,7 +38,8 @@ class Pedido:
                 f"Estado: {self.estado}\n"
                 f"Precio unitario: {self.precio_unitario}\n"
                 f"Método de pago: {self.metodo_pago}\n"
-                f"Monto a pagar: {self.monto_pagar}\n")
+                f"Monto a pagar: {self.monto_pagar}\n"
+                f"Confeccionista asignado: {self.confeccionista_asignado if self.confeccionista_asignado else 'No asignado'}\n")
 
 
 
@@ -246,6 +250,60 @@ class GestorPedidos:
         print(f"Pedido {pedido.id_pedido} cancelado correctamente.")
 
 
+    def asignar_pedido(self, gestion_empleados):
+    # Verificar si hay pedidos disponibles
+        pedidos_sin_asignar = [p for p in self.pedidos if p.confeccionista_asignado is None]
+        if not pedidos_sin_asignar:
+            print("No hay pedidos disponibles para asignar.")
+            return
+
+        if not gestion_empleados.empleados:
+            print("No hay confeccionistas registrados.")
+            return
+
+    # Mostrar solo pedidos sin confeccionista asignado
+        print("\nPedidos disponibles para asignar:")
+        for p in pedidos_sin_asignar:
+            print(f"ID Pedido: {p.id_pedido} | Estado: {p.estado} | Talla: {p.talla}")
+        try:
+            id_pedido = int(input("Ingrese el ID del pedido a asignar: "))
+        except ValueError:
+            print("ID inválido.")
+            return
+
+        pedido = next((p for p in pedidos_sin_asignar if p.id_pedido == id_pedido), None)
+        if not pedido:
+            print("Pedido no encontrado o ya tiene un confeccionista asignado.")
+            return
+
+    # Mostrar solo confeccionistas que no tienen pedidos asignados
+        empleados_disponibles = [e for e in gestion_empleados.empleados 
+                                 if not any(p.confeccionista_asignado == e.nombre for p in self.pedidos)]
+        if not empleados_disponibles:
+            print("No hay confeccionistas disponibles sin pedidos asignados.")
+            return
+
+        print("\nConfeccionistas disponibles:")
+        for e in empleados_disponibles:
+            print(f"ID: {e.id} | Nombre: {e.nombre}")
+
+        try:
+            id_empleado = int(input("Ingrese el ID del confeccionista para asignar el pedido: "))
+        except ValueError:
+            print("ID inválido.")
+            return
+
+        empleado = next((e for e in empleados_disponibles if e.id == id_empleado), None)
+        if not empleado:
+            print("Confeccionista no encontrado o ya tiene un pedido asignado.")
+            return
+
+        pedido.confeccionista_asignado = empleado.nombre
+        print(f"Pedido {pedido.id_pedido} asignado a {empleado.nombre} correctamente.")
+
+
+    
+    
 
 # menú pricipal
 
@@ -259,7 +317,8 @@ def menu():
         print("3. Editar pedido")
         print("4. eliminar pedido")
         print("5. cancelar pedido")
-        print("6. Salir")
+        print("6. asignar pedido")
+        print("7. Salir")
         opcion = input("Selecciona una opción: ")
 
         if opcion == "1":
@@ -273,6 +332,8 @@ def menu():
         elif opcion == "5":
             gestor.cancelar_pedido()
         elif opcion == "6":
+            gestor.asignar_pedido(gestion_confeccionistas)
+        elif opcion == "7":
             print("Saliendo del sistema...")
             break
         else:
