@@ -66,10 +66,10 @@ def menu_admin():
         
         if opcion =="1":
             menu_gestion_confeccionista()
-        if opcion =="2":
+        elif opcion =="2":
             menu_gestion_pedidos()
-        if opcion =="3":
-            menu_gestion_pedidos()
+        elif opcion =="3":
+            print("")
         elif opcion == "4":
             print("Cerrando sesión de administrador...")
             break
@@ -84,6 +84,7 @@ def editar_perfil():
         print("1. editar nombre")
         print("2. editar correo")
         print("3. editar contraseña")
+        print("4. ver info de perfil")
         print("5. salir")
 
         opcion = input("Elige una opción: ")
@@ -94,7 +95,9 @@ def editar_perfil():
             print("d")
         elif opcion =="3":
             print("f")
-        elif opcion == "4":
+        elif opcion =="4":
+            print("f")
+        elif opcion == "5":
             print("saliendo de gestion de pedidos...")
             break
         else:
@@ -108,7 +111,7 @@ def menu_gestion_confeccionista():
         print("2. eliminar confeccionistas")
         print("3. ver info de confeccionistas")
         print("4. editar info de confeccionista")
-        print("4. salir")
+        print("5. salir")
 
         opcion = input("Elige una opción: ")
 
