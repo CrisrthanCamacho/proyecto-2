@@ -1,78 +1,92 @@
+# Clase principal del usuario (sirve para administrador y cliente)
 class Usuario:
     def __init__(self, nombre, correo, contraseña, id_usuario):
+        # Datos principales del perfil
         self.nombre = nombre
         self.correo = correo
         self.contraseña = contraseña
-        self.id = id_usuario
+        self.id = id_usuario  # ID generado automáticamente
 
+    # Método para editar el perfil
     def editar_perfil(self, nuevo_nombre=None, nuevo_correo=None, nueva_contraseña=None):
+        # Si el usuario envía un nuevo nombre, se actualiza
         if nuevo_nombre:
             self.nombre = nuevo_nombre
+
+        # Si el usuario envía un nuevo correo, se actualiza
         if nuevo_correo:
             self.correo = nuevo_correo
+
+        # Si el usuario envía una nueva contraseña, se actualiza
         if nueva_contraseña:
             self.contraseña = nueva_contraseña
 
 
 # Contadores globales independientes
+# Estos generan ID únicos para cada usuario
 contador_admin = 1
 contador_cliente = 1
 
-#  guardar los administradores y clientes que se registran
-administradores = []
-clientes = []
+# Listas para guardar los usuarios registrados
+administradores = []  # Aquí se guardan todos los administradores
+clientes = []         # Aquí se guardan todos los clientes
 
 
 # ------------------------------
-# REGISTRO
+# FUNCIÓN: REGISTRAR ADMIN
 # ------------------------------
 def registrar_admin(nombre, correo, contraseña):
     global contador_admin
+
+    # Se genera el ID del administrador
     id_generado = "ADM-" + str(contador_admin)
-    contador_admin += 1
+    contador_admin += 1  # Se incrementa el contador
 
+    # Se crea el objeto administrador
     admin = Usuario(nombre, correo, contraseña, id_generado)
-    administradores.append(admin)
+    administradores.append(admin)  # Se guarda en la lista
 
-    return admin
+    return admin  # Devuelve el administrador creado
 
 
+# ------------------------------
+# FUNCIÓN: REGISTRAR CLIENTE
+# ------------------------------
 def registrar_cliente(nombre, correo, contraseña):
     global contador_cliente
+
+    # Se genera el ID del cliente
     id_generado = "CLI-" + str(contador_cliente)
-    contador_cliente += 1
+    contador_cliente += 1  # Se incrementa el contador
 
+    # Se crea el objeto cliente
     cliente = Usuario(nombre, correo, contraseña, id_generado)
-    clientes.append(cliente)
+    clientes.append(cliente)  # Se guarda en la lista
 
-    return cliente
+    return cliente  # Devuelve el cliente creado
 
 
 # ------------------------------
-# INICIO DE SESIÓN
+# FUNCIÓN: INICIAR SESIÓN
 # ------------------------------
 def iniciar_sesion(lista_usuarios, nombre, contraseña):
+    # Recorre todos los usuarios de la lista (pueden ser admins o clientes)
     for usuario in lista_usuarios:
+        # Valida que el nombre y la contraseña coincidan
         if usuario.nombre == nombre and usuario.contraseña == contraseña:
-            return usuario
-    return None
+            return usuario  # Retorna el usuario si es correcto
+
+    return None  # Si no encuentra coincidencia, retorna None
 
 
 # ------------------------------
-# EDITAR PERFIL
+# FUNCIÓN: EDITAR PERFIL
 # ------------------------------
 def editar_perfil(usuario, nuevo_nombre=None, nuevo_correo=None, nueva_contraseña=None):
+    # Llama al método interno del objeto Usuario
     usuario.editar_perfil(
         nuevo_nombre=nuevo_nombre,
         nuevo_correo=nuevo_correo,
         nueva_contraseña=nueva_contraseña
     )
-    return usuario
-
-def editar_perfil(admin, nuevo_nombre=None, nuevo_correo=None, nueva_contraseña=None):
-    admin.editar_perfil(
-        nuevo_nombre=nuevo_nombre,
-        nuevo_correo=nuevo_correo,
-        nueva_contraseña=nueva_contraseña
-    )
-    return admin
+    return usuario  # Devuelve el usuario con el perfil actualizado
