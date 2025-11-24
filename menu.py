@@ -1,5 +1,7 @@
 from pedidos import GestorPedidos
 gestor_pedidos = GestorPedidos()
+from prueba import GestionConfeccionistas
+gestion_confeccionistas = GestionConfeccionistas()
 # menú inicio de sesión
 
 
@@ -105,17 +107,21 @@ def menu_gestion_confeccionista():
         print("1. registrar confeccionistas")
         print("2. eliminar confeccionistas")
         print("3. ver info de confeccionistas")
+        print("4. editar info de confeccionista")
         print("4. salir")
 
         opcion = input("Elige una opción: ")
 
         if opcion == "1":
-            print("")
+            gestion_confeccionistas.registrar_empleado()
         elif opcion =="2":
-            print("")
+            gestion_confeccionistas.eliminar_empleado()
+            
         elif opcion =="3":
-            print("")
-        elif opcion == "4":
+            gestion_confeccionistas.ver_empleados()
+        elif opcion =="4":
+            gestion_confeccionistas.editar_empleado()
+        elif opcion == "5":
             print("saliendo de gestion de confeccionistas...")
             break
         else:
@@ -137,7 +143,7 @@ def menu_gestion_pedidos():
         if opcion == "1":
             gestor_pedidos.mostrar_pedidos()
         elif opcion =="2":
-            print("d")
+            gestor_pedidos.asignar_pedido(gestion_confeccionistas)
         elif opcion =="3":
             gestor_pedidos.eliminar_pedido()
         elif opcion =="4":
