@@ -1,12 +1,12 @@
 from datetime import datetime
 from prueba import GestionConfeccionistas
 gestion_confeccionistas = GestionConfeccionistas()
-#  pedido
+
 
 class Pedido:
     contador_pedidos = 101
 
-    def __init__(self, talla, tela, imagen, color_tela, cantidad, detalles_extras, estado, precio_unitario, metodo_pago):
+    def __init__(self, talla, tela, imagen, color_tela, cantidad, detalles_extras, estado = "pendiente", precio_unitario = None):
         self.id_pedido = Pedido.contador_pedidos
         Pedido.contador_pedidos += 1
 
@@ -18,13 +18,16 @@ class Pedido:
         self.detalles_extras = detalles_extras
         self.estado = estado
         self.precio_unitario = precio_unitario
-        self.metodo_pago = metodo_pago
         self.monto_pagar = self.calcular_monto()
         self.fecha_creacion = datetime.now()
         self.confeccionista_asignado = None
+        self.anticipos = []
 
     def calcular_monto(self):
+        if self.precio_unitario is None:
+            return 0
         return self.cantidad * self.precio_unitario
+    
 
     def __str__(self):
         return (f"\nID Pedido: {self.id_pedido}\n"
@@ -37,7 +40,6 @@ class Pedido:
                 f"Detalles extras: {self.detalles_extras}\n"
                 f"Estado: {self.estado}\n"
                 f"Precio unitario: {self.precio_unitario}\n"
-                f"Método de pago: {self.metodo_pago}\n"
                 f"Monto a pagar: {self.monto_pagar}\n"
                 f"Confeccionista asignado: {self.confeccionista_asignado if self.confeccionista_asignado else 'No asignado'}\n")
 
@@ -79,6 +81,7 @@ class EditorPedido:
 
 
 # menu de edicion de pedido
+
 
 class GestorEdicion:
 
@@ -182,17 +185,9 @@ class GestorPedidos:
             cantidad = 1
 
         detalles_extras = input("Detalles extras: ")
-        estado = input("Estado del pedido (Pendiente/Pagado/Entregado): ")
+        
 
-        try:
-            precio_unitario = float(input("Precio unitario: "))
-        except ValueError:
-            print("Precio inválido. Se asigna 0 por defecto.")
-            precio_unitario = 0.0
-
-        metodo_pago = input("Método de pago: ")
-
-        nuevo = Pedido(talla, tela, imagen, color_tela, cantidad, detalles_extras, estado, precio_unitario, metodo_pago)
+        nuevo = Pedido(talla = talla, tela = tela, imagen = imagen, color_tela = color_tela, cantidad = cantidad, detalles_extras = detalles_extras)
         self.pedidos.append(nuevo)
         print("\nPedido registrado.\n")
 
@@ -317,8 +312,9 @@ def menu():
         print("3. Editar pedido")
         print("4. eliminar pedido")
         print("5. cancelar pedido")
-        print("6. asignar pedido")
-        print("7. Salir")
+        print("6. cancelar pedido")
+        print("7. pagar pedido")
+        print("8. Salir")
         opcion = input("Selecciona una opción: ")
 
         if opcion == "1":
@@ -334,6 +330,8 @@ def menu():
         elif opcion == "6":
             gestor.asignar_pedido(gestion_confeccionistas)
         elif opcion == "7":
+            print("")
+        elif opcion == "8":
             print("Saliendo del sistema...")
             break
         else:
