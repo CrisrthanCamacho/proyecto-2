@@ -1,1 +1,78 @@
+class Usuario:
+    def __init__(self, nombre, correo, contraseña, id_usuario):
+        self.nombre = nombre
+        self.correo = correo
+        self.contraseña = contraseña
+        self.id = id_usuario
 
+    def editar_perfil(self, nuevo_nombre=None, nuevo_correo=None, nueva_contraseña=None):
+        if nuevo_nombre:
+            self.nombre = nuevo_nombre
+        if nuevo_correo:
+            self.correo = nuevo_correo
+        if nueva_contraseña:
+            self.contraseña = nueva_contraseña
+
+
+# Contadores globales independientes
+contador_admin = 1
+contador_cliente = 1
+
+#  guardar los administradores y clientes que se registran
+administradores = []
+clientes = []
+
+
+# ------------------------------
+# REGISTRO
+# ------------------------------
+def registrar_admin(nombre, correo, contraseña):
+    global contador_admin
+    id_generado = "ADM-" + str(contador_admin)
+    contador_admin += 1
+
+    admin = Usuario(nombre, correo, contraseña, id_generado)
+    administradores.append(admin)
+
+    return admin
+
+
+def registrar_cliente(nombre, correo, contraseña):
+    global contador_cliente
+    id_generado = "CLI-" + str(contador_cliente)
+    contador_cliente += 1
+
+    cliente = Usuario(nombre, correo, contraseña, id_generado)
+    clientes.append(cliente)
+
+    return cliente
+
+
+# ------------------------------
+# INICIO DE SESIÓN
+# ------------------------------
+def iniciar_sesion(lista_usuarios, nombre, contraseña):
+    for usuario in lista_usuarios:
+        if usuario.nombre == nombre and usuario.contraseña == contraseña:
+            return usuario
+    return None
+
+
+# ------------------------------
+# EDITAR PERFIL
+# ------------------------------
+def editar_perfil(usuario, nuevo_nombre=None, nuevo_correo=None, nueva_contraseña=None):
+    usuario.editar_perfil(
+        nuevo_nombre=nuevo_nombre,
+        nuevo_correo=nuevo_correo,
+        nueva_contraseña=nueva_contraseña
+    )
+    return usuario
+
+def editar_perfil(admin, nuevo_nombre=None, nuevo_correo=None, nueva_contraseña=None):
+    admin.editar_perfil(
+        nuevo_nombre=nuevo_nombre,
+        nuevo_correo=nuevo_correo,
+        nueva_contraseña=nueva_contraseña
+    )
+    return admin
