@@ -9,11 +9,12 @@ class Empleado:
 class GestionConfeccionistas:
     def __init__(self):
         self.empleados = []
-        self.contador_id = 1  # ID automático
+        self.contador_id = 1 
 
-    # ---------------------------
+   #---------------------------------------------------------
+
+
     # Registrar un nuevo empleado
-    # ---------------------------
     def registrar_empleado(self):
         nombre = input("Ingrese el nombre del nuevo confeccionista: ")
         empleado = Empleado(nombre, self.contador_id)
@@ -22,9 +23,10 @@ class GestionConfeccionistas:
         print(f"Empleado registrado correctamente. ID asignado: {empleado.id}")
         return empleado
 
-    # ---------------------------
-    # Ver lista de empleados
-    # ---------------------------
+   #---------------------------------------------------------
+
+
+    # Ver lista de empleado
     def ver_empleados(self):
         if not self.empleados:
             print("No hay empleados registrados.")
@@ -33,9 +35,10 @@ class GestionConfeccionistas:
             print(f"ID: {e.id} | Nombre: {e.nombre}")
         return self.empleados
 
-    # ---------------------------
+   #---------------------------------------------------------
+
+
     # Eliminar empleado por ID
-    # ---------------------------
     def eliminar_empleado(self):
         try:
             id_empleado = int(input("Ingrese el ID del confeccionista a eliminar: "))
@@ -52,9 +55,10 @@ class GestionConfeccionistas:
         print("No se encontró un empleado con ese ID.")
         return False
 
-    # ---------------------------
+#---------------------------------------------------------
+
+
     # Editar información del empleado
-    # ---------------------------
     def editar_empleado(self):
         try:
             id_empleado = int(input("Ingrese el ID del empleado a editar: "))
@@ -72,9 +76,10 @@ class GestionConfeccionistas:
         print("No se encontró un empleado con ese ID.")
         return False
 
-    # ---------------------------
+    #--------------------------------------------------------
+
+
     # Buscar empleado por ID
-    # ---------------------------
     def buscar_empleado(self):
         try:
             id_empleado = int(input("Ingrese el ID del empleado a buscar: "))
