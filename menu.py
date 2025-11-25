@@ -25,7 +25,7 @@ def menu_cliente():
         print("1. editar perfil")
         print("2. info de perfil")
         print("3. registrar pedido")
-        print("4. historial de pedidos")
+        print("4. lista  de pedidos")
         print("5. pagar pedido")
         print("6. anticipos de pedido")
         print("7. cancelar pedido")
@@ -39,7 +39,7 @@ def menu_cliente():
         elif opcion =="3":
             gestor_pedidos.agregar_pedido(usuario_actual)
         elif opcion =="4":
-            gestor_pedidos.mostrar_pedidos()
+            gestor_pedidos.mostrar_pedidos_cliente(usuario_actual)
         elif opcion == "5":
             gestor_pedidos.pagar_pedido()
         elif opcion == "6":
@@ -85,33 +85,8 @@ def menu_admin():
         else:
             print("Opción seleccionada (sin función implementada).")
 
+# --------------------------------------------------
            
-
-def editar_perfil():
-    while True:
-        print("\n===== MENÚ DE EDDICION DE PERFIL =====")
-        print("1. editar nombre")
-        print("2. editar correo")
-        print("3. editar contraseña")
-        print("4. ver info de perfil")
-        print("5. salir")
-
-        opcion = input("Elige una opción: ")
-
-        if opcion == "1":
-            print("s")
-        elif opcion =="2":
-            print("d")
-        elif opcion =="3":
-            print("f")
-        elif opcion =="4":
-            print("f")
-        elif opcion == "5":
-            print("saliendo de gestion de pedidos...")
-            break
-        else:
-            print("Opción seleccionada (sin función implementada).")
-
 
 def menu_gestion_confeccionista():
     while True:
@@ -128,7 +103,6 @@ def menu_gestion_confeccionista():
             gestion_confeccionistas.registrar_empleado()
         elif opcion =="2":
             gestion_confeccionistas.eliminar_empleado()
-            
         elif opcion =="3":
             gestion_confeccionistas.ver_empleados()
         elif opcion =="4":
@@ -139,6 +113,7 @@ def menu_gestion_confeccionista():
         else:
             print("Opción seleccionada (sin función implementada).")
 
+# --------------------------------------------------
 
 
 def menu_gestion_pedidos():
@@ -186,7 +161,7 @@ def menu_registro():
     else:
         print("opcion invalida")
 
-
+# --------------------------------------------------
 
 
 # inicio de sesión (prueba)
