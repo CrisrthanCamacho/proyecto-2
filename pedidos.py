@@ -1,7 +1,7 @@
 from datetime import datetime
 from prueba import GestionConfeccionistas
 gestion_confeccionistas = GestionConfeccionistas()
-
+#----------------------------------------------------------------
 
 class Pedido:
     contador_pedidos = 101
@@ -50,13 +50,15 @@ class Pedido:
                 f"Estado: {self.estado}\n"
                 f"Precio unitario: {self.precio_unitario}\n"
                 f"Monto a pagar: {self.monto_pagar}\n"
-                f"Total anticipado: {self.total_anticipos}\n"
+                f"Total anticipado: {self.total_anticipos()}\n"
                 f"Confeccionista asignado: {self.confeccionista_asignado if self.confeccionista_asignado else 'No asignado'}\n")
+
+#----------------------------------------------------------------
+
 
 
 
 # editor de pedidos
-
 class EditorPedido:
 
     def editar_talla(self, pedido, nueva_talla):
@@ -85,13 +87,11 @@ class EditorPedido:
         pedido.precio_unitario = nuevo_precio
         pedido.monto_pagar = pedido.calcular_monto()
 
-
+#----------------------------------------------------------------
 
 
 
 # menu de edicion de pedido
-
-
 class GestorEdicion:
 
     def __init__(self, editor):
@@ -166,15 +166,17 @@ class GestorEdicion:
 
         print("\n¡Pedido actualizado correctamente!\n")
 
+#----------------------------------------------------------------
+
 
 
 # gestion de pedidos
-
 class GestorPedidos:
 
     def __init__(self):
         self.pedidos = []
         self.editor = GestorEdicion(EditorPedido())
+# --------------------------------------------------
 
     def agregar_pedido(self, cliente):
         print("\n--- REGISTRAR NUEVO PEDIDO ---")
@@ -195,7 +197,7 @@ class GestorPedidos:
         nuevo = Pedido(cliente=cliente, talla = talla, tela = tela, imagen = imagen, color_tela = color_tela, cantidad = cantidad, detalles_extras = detalles_extras)
         self.pedidos.append(nuevo)
         print("\nPedido registrado.\n")
-
+# --------------------------------------------------
     def mostrar_pedidos(self):
         print("\n--- LISTA DE PEDIDOS ---\n")
         if not self.pedidos:
@@ -205,6 +207,19 @@ class GestorPedidos:
             print(pedido)
             print("---------------------------")
 
+    def mostrar_pedidos_cliente(self, cliente):
+        print("\n--- LISTA DE TUS PEDIDOS ---\n")
+
+        pedidos_cliente = [p for p in self.pedidos if p.cliente == cliente]
+
+        if not pedidos_cliente:
+            print("No tienes pedidos registrados.")
+            return
+
+        for pedido in pedidos_cliente:
+            print(pedido)
+            print("---------------------------")
+# --------------------------------------------------
 
     def eliminar_pedido(self):
         if not self.pedidos:
@@ -224,7 +239,7 @@ class GestorPedidos:
 
         self.pedidos.remove(pedido)
         print(f"Pedido {id_eliminar} eliminado correctamente.")
-
+# --------------------------------------------------
 
     def cancelar_pedido(self):
         if not self.pedidos:
@@ -248,7 +263,7 @@ class GestorPedidos:
 
         pedido.estado = "Cancelado"
         print(f"Pedido {pedido.id_pedido} cancelado correctamente.")
-
+# --------------------------------------------------
 
     def asignar_pedido(self, gestion_empleados):
     # Verificar si hay pedidos disponibles
@@ -300,7 +315,7 @@ class GestorPedidos:
 
         pedido.confeccionista_asignado = empleado.nombre
         print(f"Pedido {pedido.id_pedido} asignado a {empleado.nombre} correctamente.")
-
+# --------------------------------------------------
 
     def pagar_pedido(self):
         if not self.pedidos:
@@ -356,7 +371,7 @@ class GestorPedidos:
         if total_pagado >= pedido.monto_pagar:
             pedido.estado = "Pagado"
             print(f"Pedido {pedido.id_pedido} completamente pagado.")
-
+# --------------------------------------------------
 
 
     def mostrar_anticipos_pedido(self):
@@ -391,7 +406,7 @@ class GestorPedidos:
         
         print(f"\nTotal pagado hasta ahora: {self.total_anticipos}")
         print(f"restante: {self.restante_por_pagar}")
-
+# --------------------------------------------------
 
 
 
