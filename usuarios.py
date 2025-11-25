@@ -4,6 +4,7 @@ class Usuario:
         self.correo = correo
         self.contraseña = contraseña
         self.id = id_usuario
+# --------------------------------------------------
 
     def editar_perfil(self, nuevo_nombre=None, nuevo_correo=None, nueva_contraseña=None):
         if nuevo_nombre:
@@ -12,20 +13,18 @@ class Usuario:
             self.correo = nuevo_correo
         if nueva_contraseña:
             self.contraseña = nueva_contraseña
+# --------------------------------------------------
 
 
-# Contadores
 contador_admin = 1
 contador_cliente = 1
 
-# Listas de usuarios
+
 administradores = []
 clientes = []
+# --------------------------------------------------
 
 
-# ------------------------------
-# REGISTRAR ADMIN (con inputs)
-# ------------------------------
 def registrar_admin():
     global contador_admin
 
@@ -42,11 +41,9 @@ def registrar_admin():
 
     print(f"\nAdministrador registrado con ID: {id_generado}")
     return admin
+# --------------------------------------------------
 
 
-# ------------------------------
-# REGISTRAR CLIENTE (con inputs)
-# ------------------------------
 def registrar_cliente():
     global contador_cliente
 
@@ -63,11 +60,9 @@ def registrar_cliente():
 
     print(f"\nCliente registrado con ID: {id_generado}")
     return cliente
+# --------------------------------------------------
 
 
-# ------------------------------
-# INICIAR SESIÓN (con inputs)
-# ------------------------------
 def iniciar_sesion(lista_usuarios):
     print("\n--- Iniciar Sesión ---")
 
@@ -81,11 +76,9 @@ def iniciar_sesion(lista_usuarios):
 
     print("\n⚠ Usuario o contraseña incorrectos.")
     return None
+# --------------------------------------------------
 
 
-# ------------------------------
-# EDITAR PERFIL (con inputs)
-# ------------------------------
 def editar_perfil(usuario):
     print("\n--- Editar Perfil ---")
 
