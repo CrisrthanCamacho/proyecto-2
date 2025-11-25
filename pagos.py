@@ -1,10 +1,8 @@
 
-class Pedido:
-    def __init__(self, id_pedido, descripcion, precio_unitario=None):
-        self.id_pedido = id_pedido
-        self.descripcion = descripcion
-        self.precio_unitario = precio_unitario
-        self.anticipos = []
+
+class GestorPagos:
+    def __init__(self, pedidos):
+        self.pedidos = pedidos
 
     def agregar_anticipo(self, monto, metodo):
         self.anticipos.append({"monto": monto, "metodo": metodo})
@@ -12,11 +10,6 @@ class Pedido:
 
     def total_anticipos(self):
         return sum(p["monto"] for p in self.anticipos)
-
-
-class GestorPagos:
-    def __init__(self, pedidos):
-        self.pedidos = pedidos
 
     def abonar_pedido(self):
         if not self.pedidos:
@@ -63,7 +56,7 @@ class GestorPagos:
             print("No hay anticipos realizados.")
             return
 
-        print(f"\nAnticipos del pedido {pedido.id_pedido} ({pedido.descripcion}):")
+        print(f"\nAnticipos del pedido {pedido.id_pedido} ({pedido.descripcion()}):")
         for pago in pedido.anticipos:
             print(f"Monto: {pago['monto']} | Método: {pago['metodo']}")
         print(f"Total abonado: {pedido.total_anticipos()}")
@@ -79,12 +72,8 @@ def mostrar_menu():
 
 
 def main():
-    # Pedidos de ejemplo
-    pedidos = [
-        Pedido(1, "Producto A", 100),
-        Pedido(2, "Producto B", 200),
-        Pedido(3, "Producto C")  # Precio no definido aún
-    ]
+
+    pedidos = []
 
     gestor = GestorPagos(pedidos)
 
