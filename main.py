@@ -7,15 +7,12 @@ def main():
         opcion = input("Selecciona una opción: ")
 
         if opcion == "1":
-            menu_registro_usuario()
+            menu_registro()
 
         elif opcion == "2":
-            menu_registro_cliente()
-
-        elif opcion == "3":
             menu_inicio_sesion()
 
-        elif opcion == "4":
+        elif opcion == "3":
             print("Saliendo del sistema...")
             break
 
