@@ -6,10 +6,11 @@ gestion_confeccionistas = GestionConfeccionistas()
 class Pedido:
     contador_pedidos = 101
 
-    def __init__(self, talla, tela, imagen, color_tela, cantidad, detalles_extras, estado = "pendiente", precio_unitario = None):
+    def __init__(self, cliente, talla, tela, imagen, color_tela, cantidad, detalles_extras, estado = "pendiente", precio_unitario = None):
         self.id_pedido = Pedido.contador_pedidos
         Pedido.contador_pedidos += 1
 
+        self.cliente = cliente  
         self.talla = talla
         self.tela = tela
         self.imagen = imagen
@@ -28,10 +29,18 @@ class Pedido:
             return 0
         return self.cantidad * self.precio_unitario
     
+    def total_anticipos(self):
+        return sum(a["monto"] for a in self.anticipos)
+    
+    def restante_por_pagar(self):
+        return self.monto_pagar - self.total_anticipos()
+     
 
     def __str__(self):
+
         return (f"\nID Pedido: {self.id_pedido}\n"
                 f"fecha de registro: {self.fecha_creacion.strftime('%d/%m/%Y %H:%M:%S')}\n"
+                f"Cliente: {self.cliente.nombre} (ID: {self.cliente.id})\n"
                 f"Talla: {self.talla}\n"
                 f"Tela: {self.tela}\n"
                 f"Imagen referencia: {self.imagen}\n"
@@ -41,6 +50,7 @@ class Pedido:
                 f"Estado: {self.estado}\n"
                 f"Precio unitario: {self.precio_unitario}\n"
                 f"Monto a pagar: {self.monto_pagar}\n"
+                f"Total anticipado: {self.total_anticipos}\n"
                 f"Confeccionista asignado: {self.confeccionista_asignado if self.confeccionista_asignado else 'No asignado'}\n")
 
 
@@ -75,8 +85,7 @@ class EditorPedido:
         pedido.precio_unitario = nuevo_precio
         pedido.monto_pagar = pedido.calcular_monto()
 
-    def editar_metodo_pago(self, pedido, nuevo_metodo):
-        pedido.metodo_pago = nuevo_metodo
+
 
 
 
@@ -115,8 +124,7 @@ class GestorEdicion:
             print("6. Detalles extras")
             print("7. Estado")
             print("8. Precio unitario")
-            print("9. Método de pago")
-            print("10. Salir de edición")
+            print("9. Salir de edición")
 
             opcion = input("Seleccione: ")
 
@@ -151,9 +159,6 @@ class GestorEdicion:
                 except ValueError:
                     print("Precio inválido.")
             elif opcion == "9":
-                nuevo = input("Nuevo método de pago: ")
-                self.editor.editar_metodo_pago(pedido, nuevo)
-            elif opcion == "10":
                 print("Saliendo del editor...")
                 break
             else:
@@ -171,7 +176,7 @@ class GestorPedidos:
         self.pedidos = []
         self.editor = GestorEdicion(EditorPedido())
 
-    def agregar_pedido(self):
+    def agregar_pedido(self, cliente):
         print("\n--- REGISTRAR NUEVO PEDIDO ---")
         talla = input("Talla: ")
         tela = input("Tela: ")
@@ -187,7 +192,7 @@ class GestorPedidos:
         detalles_extras = input("Detalles extras: ")
         
 
-        nuevo = Pedido(talla = talla, tela = tela, imagen = imagen, color_tela = color_tela, cantidad = cantidad, detalles_extras = detalles_extras)
+        nuevo = Pedido(cliente=cliente, talla = talla, tela = tela, imagen = imagen, color_tela = color_tela, cantidad = cantidad, detalles_extras = detalles_extras)
         self.pedidos.append(nuevo)
         print("\nPedido registrado.\n")
 
@@ -297,6 +302,99 @@ class GestorPedidos:
         print(f"Pedido {pedido.id_pedido} asignado a {empleado.nombre} correctamente.")
 
 
+    def pagar_pedido(self):
+        if not self.pedidos:
+            print("No hay pedidos registrados.")
+            return
+        
+        print("\nPedidos disponibles para pagar:")
+        for p in self.pedidos:
+            print(f"ID: {p.id_pedido} | Monto total: {p.self.monto_pagar} | Restante por pagar: {self.restante_por_pagar}")
+        
+        try:
+            id_pedido = int(input("Ingrese el ID del pedido que desea pagar: "))
+        except ValueError:
+            print("ID inválido.")
+            return
+
+        pedido = next((p for p in self.pedidos if p.id_pedido == id_pedido), None)
+        if not pedido:
+            print("Pedido no encontrado.")
+            return
+
+        # Elegir método de pago
+        print("\nSeleccione método de pago:")
+        print("1. Nequi")
+        print("2. Bancolombia")
+        opcion = input("Opción: ")
+
+        if opcion == "1":
+            metodo = "Nequi"
+        elif opcion == "2":
+            metodo = "Bancolombia"
+        else:
+            print("Método de pago inválido.")
+            return
+
+        try:
+            monto = float(input("Ingrese el monto que va a pagar como anticipo: "))
+        except ValueError:
+            print("Monto inválido.")
+            return
+
+        # Registrar anticipo con fecha y hora
+        pedido.anticipos.append({
+            "monto": monto,
+            "fecha": datetime.now(),
+            "metodo": metodo
+        })
+
+        print(f"Anticipo de {monto} registrado para el pedido {pedido.id_pedido} mediante {metodo}.")
+
+        # Cambiar estado si ya se pagó todo
+        total_pagado = sum([a['monto'] for a in pedido.anticipos])
+        if total_pagado >= pedido.monto_pagar:
+            pedido.estado = "Pagado"
+            print(f"Pedido {pedido.id_pedido} completamente pagado.")
+
+
+
+    def mostrar_anticipos_pedido(self):
+        if not self.pedidos:
+            print("No hay pedidos registrados.")
+            return
+        
+        print("\nPedidos disponibles:")
+        for p in self.pedidos:
+            print(f"ID: {p.id_pedido} | Monto total: {p.monto_pagar}")
+
+        try:
+            id_pedido = int(input("Ingrese el ID del pedido para ver sus anticipos: "))
+        except ValueError:
+            print("ID inválido.")
+            return
+
+        pedido = next((p for p in self.pedidos if p.id_pedido == id_pedido), None)
+        if not pedido:
+            print("Pedido no encontrado.")
+            return
+
+        if not pedido.anticipos:
+            print("No hay anticipos registrados para este pedido.")
+            return
+
+        print(f"\nAnticipos del pedido {pedido.id_pedido}:")
+        for a in pedido.anticipos:
+            fecha_str = a['fecha'].strftime("%d/%m/%Y %H:%M:%S")
+            print(f"Fecha: {fecha_str} | Monto: {a['monto']} | Método: {a['metodo']}")
+
+        
+        print(f"\nTotal pagado hasta ahora: {self.total_anticipos}")
+        print(f"restante: {self.restante_por_pagar}")
+
+
+
+
     
     
 
@@ -312,9 +410,10 @@ def menu():
         print("3. Editar pedido")
         print("4. eliminar pedido")
         print("5. cancelar pedido")
-        print("6. cancelar pedido")
+        print("6. asignar pedido")
         print("7. pagar pedido")
-        print("8. Salir")
+        print("8. mostrar anticipos de un pedido")
+        print("9. Salir")
         opcion = input("Selecciona una opción: ")
 
         if opcion == "1":
@@ -330,8 +429,11 @@ def menu():
         elif opcion == "6":
             gestor.asignar_pedido(gestion_confeccionistas)
         elif opcion == "7":
-            print("")
+            gestor.pagar_pedido()
         elif opcion == "8":
+            gestor.mostrar_anticipos_pedido()
+
+        elif opcion == "9":
             print("Saliendo del sistema...")
             break
         else:
