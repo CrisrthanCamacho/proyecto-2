@@ -324,7 +324,7 @@ class GestorPedidos:
         
         print("\nPedidos disponibles para pagar:")
         for p in self.pedidos:
-            print(f"ID: {p.id_pedido} | Monto total: {p.self.monto_pagar} | Restante por pagar: {self.restante_por_pagar}")
+            print(f"ID: {p.id_pedido} | Monto total: {p.monto_pagar} | Restante por pagar: {p.restante_por_pagar()}")
         
         try:
             id_pedido = int(input("Ingrese el ID del pedido que desea pagar: "))
@@ -404,8 +404,8 @@ class GestorPedidos:
             print(f"Fecha: {fecha_str} | Monto: {a['monto']} | Método: {a['metodo']}")
 
         
-        print(f"\nTotal pagado hasta ahora: {self.total_anticipos}")
-        print(f"restante: {self.restante_por_pagar}")
+        print(f"\nTotal pagado hasta ahora: {p.total_anticipos()}")
+        print(f"restante: {p.restante_por_pagar()}")
 # --------------------------------------------------
 
 
